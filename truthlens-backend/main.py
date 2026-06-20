@@ -2,6 +2,7 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
+from fastapi.staticfiles import StaticFiles
 from routers import image_router, text_router, sources_router
 
 load_dotenv()
@@ -25,3 +26,4 @@ app.include_router(sources_router.router, prefix="/api/sources", tags=["Trusted 
 @app.get("/")
 def health_check():
     return {"status": "TruthLens API is running"}
+app.mount("/", StaticFiles(directory="static", html=True), name="frontend")
