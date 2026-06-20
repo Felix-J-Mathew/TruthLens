@@ -1,0 +1,38 @@
+# --- Python (FastAPI) ---
+__pycache__/
+*.py[cod]
+*.pyo
+venv/
+.venv/
+env/
+.env
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+dist/
+build/
+
+# --- React (Node.js) ---
+node_modules/
+dist/
+build/
+.next/
+.npm/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# --- Environment & Secrets ---
+# Keep your actual keys out of GitHub
+.env
+.env.*
+!.env.example
+
+# --- IDE & System ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
