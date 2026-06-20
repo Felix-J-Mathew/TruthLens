@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+python-multipart
+Pillow
+opencv-python-headless
+numpy
+piexif
+spacy
+requests
+python-dotenv
+psycopg2-binary
