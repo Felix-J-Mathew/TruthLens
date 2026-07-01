@@ -9,11 +9,11 @@ load_dotenv()
 
 app = FastAPI(title="TruthLens API", version="0.1.0")
 
-FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
+FRONTEND_URL = os.getenv("FRONTEND_URL", "https://truth-lens-phi.vercel.app/")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[FRONTEND_URL, "https://truthlens.vercel.app"],
+    allow_origins=[FRONTEND_URL, "https://truth-lens-phi.vercel.app/"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
