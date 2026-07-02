@@ -137,7 +137,6 @@ function ImageSignalTable({ signals }) {
     { label: "Error Level Analysis",  verdict: signals.ela?.verdict,         score: signals.ela?.suspicion_score },
     { label: "Metadata Inspection",   verdict: signals.metadata?.verdict,    score: { low:10, medium:40, high:80, unknown:30 }[signals.metadata?.risk_level] ?? 30 },
     { label: "Noise Consistency",     verdict: signals.noise?.verdict,       score: signals.noise?.suspicion_score },
-    { label: "Clone Detection",       verdict: signals.clone?.verdict,       score: signals.clone?.suspicion_score },
   ]
   return <SignalTable rows={rows} />
 }

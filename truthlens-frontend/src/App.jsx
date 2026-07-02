@@ -5,7 +5,6 @@ import HomePage from "./pages/HomePage.jsx"
 import ImageAnalysisPage from "./pages/ImageAnalysisPage.jsx"
 import TextAnalysisPage from "./pages/TextAnalysisPage.jsx"
 import ReportPage from "./pages/ReportPage.jsx"
-import SourcesPage from "./pages/SourcesPage.jsx"
 
 function App() {
   return (
@@ -17,7 +16,6 @@ function App() {
           <Route path="/image"   element={<ImageAnalysisPage />} />
           <Route path="/text"    element={<TextAnalysisPage />} />
           <Route path="/report"  element={<ReportPage />} />
-          <Route path="/sources" element={<SourcesPage />} />
         </Routes>
       </main>
       <Footer />

@@ -5,7 +5,6 @@ import { analyzeImage } from "../services/api"
 import UploadBox from "../components/imageForensics/UploadBox"
 import ELAHeatmapView from "../components/imageForensics/ELAHeatmapView"
 import MetadataPanel from "../components/imageForensics/MetadataPanel"
-import CloneDetectionView from "../components/imageForensics/CloneDetectionView"
 import VerdictSummary from "../components/report/VerdictSummary"
 
 export default function ImageAnalysisPage() {
@@ -41,7 +40,7 @@ export default function ImageAnalysisPage() {
         <h1 className="text-3xl font-display font-bold text-primary">Image Forensics</h1>
         <p className="text-secondary mt-2 text-sm max-w-lg">
           Upload an image to run ELA, metadata inspection, noise analysis,
-          frequency analysis, and clone detection.
+          and frequency analysis.
         </p>
       </div>
 
@@ -87,7 +86,7 @@ export default function ImageAnalysisPage() {
           {isLoading && (
             <div className="bg-surface border border-border p-4 space-y-2">
               <p className="font-mono text-xs text-muted">RUNNING SIGNALS</p>
-              {["ELA", "Metadata", "Noise Analysis", "Frequency", "Clone Detection"].map((s) => (
+              {["ELA", "Metadata", "Noise Analysis", "Frequency"].map((s) => (
                 <div key={s} className="flex items-center gap-2">
                   <div className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse" />
                   <span className="text-xs text-secondary">{s}</span>
@@ -135,7 +134,6 @@ export default function ImageAnalysisPage() {
           <div className="grid md:grid-cols-2 gap-4">
             <ELAHeatmapView ela={result.signals.ela} />
             <MetadataPanel  metadata={result.signals.metadata} />
-            <CloneDetectionView    clone={result.signals.clone} />
           </div>
 
           {/* Noise card */}

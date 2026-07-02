@@ -35,24 +35,4 @@ export async function analyzeText(text, url = "") {
   )
 }
 
-// ── Trusted sources (CRUD) ────────────────────────────────────────────────────
 
-export async function getSources() {
-  return handleResponse(await fetch(`${BASE_URL}/api/sources/`))
-}
-
-export async function addSource(name, domain, category) {
-  return handleResponse(
-    await fetch(`${BASE_URL}/api/sources/`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, domain, category }),
-    })
-  )
-}
-
-export async function deleteSource(id) {
-  return handleResponse(
-    await fetch(`${BASE_URL}/api/sources/${id}`, { method: "DELETE" })
-  )
-}

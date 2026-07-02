@@ -255,68 +255,6 @@ def run_noise_analysis(cv2_image: np.ndarray) -> dict:
     }
 
 
-# ── Signal 5: Clone Detection ─────────────────────────────────────────────────
-
-def run_clone_detection(cv2_image: np.ndarray) -> dict:
-    """
-    Clone detection via template matching.
-
-    If a region of an image is copy-pasted to cover something up (e.g. to
-    hide a logo or a face), the same pixel pattern appears in two places.
-
-    Method:
-      1. Divide the image into a grid of small patches (64x64 px).
-      2. For each patch, use cv2.matchTemplate to search the rest of
-         the image for a highly similar patch.
-      3. If a near-identical patch is found far away from its origin,
-         flag it as a potential clone.
-
-    Note: this is a basic implementation. Rotation/scale-invariant clone
-    detection requires more advanced techniques (SIFT/ORB feature matching).
-    """
-    gray = cv2.cvtColor(cv2_image, cv2.COLOR_BGR2GRAY)
-    h, w = gray.shape
-    patch_size = 150
-    threshold = 0.995  # correlation coefficient — 1.0 = perfect match
-    min_distance = patch_size * 2  # ignore matches that are too close (same patch)
-
-    clone_pairs = []
-
-    # Limit to a reasonable number of patches for performance
-    rows = range(0, h - patch_size, patch_size * 4)
-    cols = range(0, w - patch_size, patch_size * 4)
-
-    for r in rows:
-        for c in cols:
-            patch = gray[r:r + patch_size, c:c + patch_size]
-            result = cv2.matchTemplate(gray, patch, cv2.TM_CCOEFF_NORMED)
-            locations = np.where(result >= threshold)
-
-            for (match_r, match_c) in zip(*locations[::-1]):
-                # Skip if it's the original patch location
-                distance = ((match_r - r) ** 2 + (match_c - c) ** 2) ** 0.5
-                if distance > min_distance:
-                    clone_pairs.append({
-                        "source": [int(c), int(r)],
-                        "clone":  [int(match_c), int(match_r)],
-                    })
-
-    # Deduplicate — many overlapping matches point to the same clone
-    unique_clones = clone_pairs[:5]  # return up to 5 unique pairs
-
-    if unique_clones:
-        verdict = f"{len(unique_clones)} potential cloned region(s) detected"
-        suspicion = min(100, len(unique_clones) * 25)
-    else:
-        verdict = "No cloned regions detected"
-        suspicion = 0
-
-    return {
-        "clone_pairs": unique_clones,
-        "suspicion_score": suspicion,
-        "verdict": verdict,
-    }
-
 
 # ── Signal 6: Screenshot Detection ───────────────────────────────────────────
 
@@ -372,14 +310,12 @@ def _compute_trust_score(signals: dict) -> dict:
 
     Each signal gets a weight based on how reliable it is:
       - ELA and metadata are the strongest indicators
-      - Frequency analysis is strong for AI detection
-      - Noise and clone detection are supporting signals
+      - Noise analysis is a supporting signal
     """
     weights = {
-        "ela":       0.35,
-        "metadata":  0.30,
-        "noise":     0.20,
-        "clone":     0.15,
+        "ela":       0.40,
+        "metadata":  0.35,
+        "noise":     0.25,
     }
 
     # Convert metadata risk_level to a numeric suspicion score
@@ -391,8 +327,7 @@ def _compute_trust_score(signals: dict) -> dict:
     weighted_suspicion = (
         signals["ela"]["suspicion_score"]       * weights["ela"] +
         metadata_suspicion                       * weights["metadata"] +
-        signals["noise"]["suspicion_score"]     * weights["noise"] +
-        signals["clone"]["suspicion_score"]     * weights["clone"]
+        signals["noise"]["suspicion_score"]     * weights["noise"]
     )
 
     trust_score = max(0, 100 - int(weighted_suspicion))
@@ -432,9 +367,8 @@ def run_full_analysis(image_bytes: bytes, filename: str) -> dict:
     signals = {
         "screenshot": run_screenshot_detection(pil_image),
         "ela":        run_ela(original_image),
-        "metadata":   run_metadata(pil_image),
+        "metadata":   run_metadata(original_image),
         "noise":      run_noise_analysis(cv2_image),
-        "clone":      run_clone_detection(cv2_image),
     }
 
     overall = _compute_trust_score(signals)

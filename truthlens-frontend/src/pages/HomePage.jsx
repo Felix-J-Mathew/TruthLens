@@ -75,7 +75,7 @@ export default function HomePage() {
           <ImageIcon className="mb-4 text-secondary group-hover:text-accent transition-colors" size={22} />
           <h2 className="font-display font-semibold text-primary mb-2">Image Forensics</h2>
           <p className="text-secondary text-sm leading-relaxed">
-            ELA heatmap, metadata inspection, clone detection, noise consistency,
+            ELA heatmap, metadata inspection, noise consistency,
             and frequency analysis for spotting edited or AI-generated images.
           </p>
         </Link>
